@@ -1,0 +1,10 @@
+{
+  "name": "herocapture-extension",
+  "version": "1.0.0",
+  "description": "HeroCapture Chrome Extension - Capture and analyze website hero sections",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Load as unpacked extension in chrome://extensions'",
+    "lint": "echo 'No build step needed - vanilla JS extension'"
+  }
+}

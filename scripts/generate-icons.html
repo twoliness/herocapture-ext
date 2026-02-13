@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HeroCapture Icon Generator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    h1 { font-size: 24px; margin-bottom: 8px; }
+    p.subtitle { color: #888; margin-bottom: 32px; }
+    .icons-grid {
+      display: flex;
+      gap: 40px;
+      align-items: flex-end;
+      margin-bottom: 40px;
+    }
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .icon-item canvas { border: 1px solid #333; border-radius: 4px; }
+    .icon-item .label { font-size: 14px; color: #aaa; }
+    button {
+      background: #16130f;
+      color: #fff;
+      border: 2px solid #444;
+      padding: 10px 24px;
+      font-size: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    button:hover { background: #2a2520; border-color: #666; }
+    .buttons { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  </style>
+</head>
+<body>
+  <h1>HeroCapture Icon Generator</h1>
+  <p class="subtitle">Open this file in a browser to preview and download the extension icons.</p>
+
+  <div class="icons-grid">
+    <div class="icon-item">
+      <canvas id="canvas-16" width="16" height="16"></canvas>
+      <span class="label">16 x 16</span>
+    </div>
+    <div class="icon-item">
+      <canvas id="canvas-48" width="48" height="48"></canvas>
+      <span class="label">48 x 48</span>
+    </div>
+    <div class="icon-item">
+      <canvas id="canvas-128" width="128" height="128"></canvas>
+      <span class="label">128 x 128</span>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button onclick="downloadIcon(16)">Download 16px</button>
+    <button onclick="downloadIcon(48)">Download 48px</button>
+    <button onclick="downloadIcon(128)">Download 128px</button>
+    <button onclick="downloadAll()">Download All</button>
+  </div>
+
+  <script>
+    const BG_COLOR = "#16130f";
+    const TEXT_COLOR = "#ffffff";
+
+    function drawIcon(canvas) {
+      const size = canvas.width;
+      const ctx = canvas.getContext("2d");
+      const radius = size * 0.18;
+
+      ctx.clearRect(0, 0, size, size);
+
+      // Rounded rectangle background
+      ctx.beginPath();
+      ctx.moveTo(radius, 0);
+      ctx.lineTo(size - radius, 0);
+      ctx.quadraticCurveTo(size, 0, size, radius);
+      ctx.lineTo(size, size - radius);
+      ctx.quadraticCurveTo(size, size, size - radius, size);
+      ctx.lineTo(radius, size);
+      ctx.quadraticCurveTo(0, size, 0, size - radius);
+      ctx.lineTo(0, radius);
+      ctx.quadraticCurveTo(0, 0, radius, 0);
+      ctx.closePath();
+      ctx.fillStyle = BG_COLOR;
+      ctx.fill();
+
+      // "H" letter
+      const fontSize = Math.round(size * 0.65);
+      ctx.fillStyle = TEXT_COLOR;
+      ctx.font = "bold " + fontSize + "px -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("H", size / 2, size / 2 + size * 0.03);
+    }
+
+    function downloadIcon(size) {
+      const canvas = document.getElementById("canvas-" + size);
+      const link = document.createElement("a");
+      link.download = "icon-" + size + ".png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+
+    function downloadAll() {
+      [16, 48, 128].forEach(function(size, i) {
+        setTimeout(function() { downloadIcon(size); }, i * 200);
+      });
+    }
+
+    // Draw all icons on load
+    [16, 48, 128].forEach(function(size) {
+      drawIcon(document.getElementById("canvas-" + size));
+    });
+  </script>
+</body>
+</html>
